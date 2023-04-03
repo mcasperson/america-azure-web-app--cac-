@@ -63,7 +63,7 @@ step "create-web-app" {
                 HOST=$(az webapp list --resource-group "${RESOURCE_NAME}-rg"  --query "[].{hostName: defaultHostName}" | jq -r '.[0].hostName')
                 set_octopusvariable "HostName" $HOST
                 write_highlight "[https://$HOST](http://$HOST)"
-                    EOT
+                EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "Bash"
             OctopusUseBundledTooling = "False"
@@ -141,7 +141,7 @@ step "end-to-end-test-with-cypress" {
                 fi
                 
                 exit ${RESULT}
-                    EOT
+                EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "Bash"
             OctopusUseBundledTooling = "False"
@@ -211,7 +211,7 @@ step "check-for-vulnerabilities" {
                 
                 exit 0
                 
-                    EOT
+                EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "Bash"
             Octopus.Action.SubstituteInFiles.Enabled = "True"
@@ -226,5 +226,20 @@ step "check-for-vulnerabilities" {
                 Extract = "True"
             }
         }
+    }
+}
+
+step "run-a-script" {
+    name = "Run a Script"
+
+    action {
+        action_type = "Octopus.Script"
+        properties = {
+            Octopus.Action.RunOnServer = "true"
+            Octopus.Action.Script.ScriptBody = "echo \"Hello from the US!\""
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+        }
+        worker_pool = "hosted-windows"
     }
 }
